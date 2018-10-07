@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: >
+  Contains security groups
+
+Resources:
+  JenkinsSG:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupName: JenkinsMaster
+      GroupDescription: Contains rules to access Jenkin host
+      VpcId: !ImportValue "VpcA"
+      SecurityGroupIngress:
+        - Description: Allow http
+          IpProtocol: tcp
+          CidrIp: "0.0.0.0/0"
+          FromPort: 80
+          ToPort: 80
+
+        - Description: Allow ssh
+          IpProtocol: tcp
+          CidrIp: "0.0.0.0/0"
+          FromPort: 22
+          ToPort: 22
+
+        - Description: Open Jenkins port
+          IpProtocol: tcp
+          CidrIp: "0.0.0.0/0"
+          FromPort: 8080
+          ToPort: 8080
+
+        - Description: Open Jenkins communication port
+          IpProtocol: tcp
+          CidrIp: "0.0.0.0/0"
+          FromPort: 50000
+          ToPort: 50000
+      SecurityGroupEgress:
+        - Description: Allow all traffic
+          IpProtocol: -1
+          CidrIp: "0.0.0.0/0"
+
+Outputs:
+  JenkinsSGOut:
+    Description: SG for connection to Jenkins
+    Value: !Ref JenkinsSG
+    Export:
+      Name: "JenkinsSG"
