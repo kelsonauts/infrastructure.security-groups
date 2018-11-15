@@ -39,9 +39,33 @@ Resources:
           IpProtocol: -1
           CidrIp: "0.0.0.0/0"
 
+  EfsSG:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupName: EFSMountTarget
+      GroupDescription: Contains rules to allow inbound nfs  traffic only
+      VpcId: !ImportValue "VpcA"
+      SecurityGroupIngress:
+        - Description: Allow nfs inbound
+          IpProtocol: tcp
+          CidrIp: "0.0.0.0/0"
+          FromPort: 2049
+          ToPort: 2049
+
+      SecurityGroupEgress:
+        - Description: Allow all traffic
+          IpProtocol: -1
+          CidrIp: "0.0.0.0/0"
+
 Outputs:
   JenkinsSGOut:
     Description: SG for connection to Jenkins
     Value: !Ref JenkinsSG
     Export:
       Name: "JenkinsSG"
+
+  EfsSGOut:
+    Description: SG for EFS mount targets
+    Value: !Ref EfsSG
+    Export:
+      Name: "EfsMountTargetSG"
