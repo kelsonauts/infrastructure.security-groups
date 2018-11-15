@@ -1,6 +1,6 @@
 #!/bin/bash -xe
 
-STACK_NAME="ASG"
+STACK_NAME="asg"
 TEMPLATE_NAME="sg-resources.yaml"
 
 if [[ `aws cloudformation describe-stacks | jq ".Stacks[] | select(.StackName == \"${STACK_NAME}\")"` ]]; then 
